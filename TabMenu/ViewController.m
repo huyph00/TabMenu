@@ -20,7 +20,7 @@
 	// Do any additional setup after loading the view, typically from a nib.
     
     //test 20 tabs
-    NSMutableArray * arrTab =[[NSMutableArray alloc]init];
+    arrTab =[[NSMutableArray alloc]init];
     for (int i = 0 ; i < 20; i++) {
         TabObj * tab = [[TabObj alloc]init];
         tab.title = [NSString stringWithFormat:@"this is the tab %d",i];
@@ -45,17 +45,44 @@
         
     }
     //test menu rect
+    
     CGRect rect = self.view.frame;
+
     rect.origin.y = 50;
     rect.size.height = self.view.frame.size.height - 50;
-//    MenuTabView * menu = [[MenuTabView alloc]initMenuHorizontalWithFrame:rect andTabs:[NSArray arrayWithArray:arrTab]];
-    
-    MenuTabView * menu = [[MenuTabView alloc]initMenuVerticalWithFrame:rect andTabs:[NSArray arrayWithArray:arrTab]];
+  menu = [[MenuTabView alloc]initMenuHorizontalWithFrame:rect tabHeight:50 titleFont:[UIFont systemFontOfSize:17] iconRect:CGRectMake(0, 0, 30, 30) tabs:arrTab andSelectedIndex:2];
+
+//    menu = [[MenuTabView alloc]initMenuVerticalWithFrame:rect tabWidth:30 titleFont:[UIFont systemFontOfSize:17] iconRect:CGRectMake(0, 0, 30, 30) tabs:arrTab andSelectedIndex:1];
     
     [self.view addSubview:menu];
 
 }
+- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation;
+{
+    if (fromInterfaceOrientation == UIInterfaceOrientationLandscapeLeft ||
+        fromInterfaceOrientation == UIInterfaceOrientationLandscapeRight)
+    {
+//        CGRect rect = self.view.frame;
+//        
+//        rect.origin.y = 50;
+//        rect.size.height = self.view.frame.size.height - 50;
+//        [menu removeFromSuperview];
+//        
+//        if ([menu isHorizonMode]) {
+//            menu = [[MenuTabView alloc]initMenuHorizontalWithFrame:rect tabHeight:30 titleFont:[UIFont systemFontOfSize:17] iconRect:CGRectMake(0, 0, 30, 30) andTabs:arrTab];
+//        }
+//        
+//        else menu = [[MenuTabView alloc]initMenuVerticalWithFrame:rect tabWidth:30 titleFont:[UIFont systemFontOfSize:17] iconRect:CGRectMake(0, 0, 30, 30) andTabs:arrTab];
+//        
+//        [self.view addSubview:menu];
 
+    }
+    else
+    {
+
+
+    }
+}
 - (void)didReceiveMemoryWarning
 {
     NSLog(@"Memory warning");

@@ -23,7 +23,7 @@
 //============== Horizontal mode =============
 //============================================
 //
--(id)initMenuHorizontalWithFrame:(CGRect)frame andTabs:(NSArray *)objects;
+-(id)initMenuHorizontalWithFrame:(CGRect)frame tabHeight:(CGFloat)height titleFont:(UIFont*)font iconRect:(CGRect)rect tabs:(NSArray *)objects andSelectedIndex:(int)index;
 {
     self = [super initWithFrame:frame];
     if (self) {
@@ -31,24 +31,19 @@
         // Initialization code
         self.backgroundColor = [UIColor whiteColor];
         if(!objects || objects.count == 0) return self;
+        
         selectedTab = 0;
+        if (index < objects.count) {
+            selectedTab = index;
+        }
         tabsArr = objects;
         UIScrollView * scrTab = [[UIScrollView alloc]init];
 
         //setup frame for scroll tabs
-        CGRect scrRect;
-        float tabHeight;
-        
-        if ([SharedData sharedInstance].isIpad) {
-            scrRect = CGRectMake(0, 0, frame.size.width, TAB_IPAD_HORI_HEIGHT);
-            tabHeight = TAB_IPAD_HORI_HEIGHT;
-        }
-        else
-        {
-            scrRect = CGRectMake(0, 0, frame.size.width, TAB_IPHONE_HORI_HEIGHT);
-            tabHeight = TAB_IPHONE_HORI_HEIGHT;
+        CGFloat tabHeight = height;
 
-        }
+        CGRect scrRect= CGRectMake(0, 0, self.frame.size.width, tabHeight);
+        
         scrTab.frame = scrRect;
         [scrTab setBounces:NO];
         [self addSubview:scrTab];
@@ -60,7 +55,7 @@
             UIButton * tabBtn = [[UIButton alloc]init];
             tabBtn.tag = i;
             tabBtn.backgroundColor = [UIColor yellowColor];
-            if(i == 0)
+            if(i == selectedTab)
             {
                 tabBtn.backgroundColor = [UIColor whiteColor];
                 prevBtn = tabBtn;
@@ -70,10 +65,17 @@
             
             [scrTab addSubview:tabBtn];
 
-            
             UILabel * lblTitle = [[UILabel alloc]init];
-            CGFloat width =  [[NSString stringWithFormat:@" %@",obj.title] sizeWithFont:lblTitle.font].width;
-            
+            lblTitle.font = font;
+            CGFloat width ;
+
+            if ([[NSString stringWithFormat:@" %@",obj.title] respondsToSelector:@selector( sizeWithFont:) ]) {
+                width =  [[NSString stringWithFormat:@" %@",obj.title] sizeWithFont:lblTitle.font].width;
+            }
+            else
+            {
+                width =  [[NSString stringWithFormat:@" %@",obj.title] sizeWithAttributes:@{NSFontAttributeName:lblTitle.font}].width;
+            }
             lblTitle.frame = CGRectMake(0 , 0, width,tabHeight);
             lblTitle.backgroundColor = [UIColor clearColor];
             lblTitle.text = [NSString stringWithFormat:@" %@",obj.title];
@@ -82,7 +84,10 @@
             
             if(obj.icon)
             {
-                UIImageView *icon = [[UIImageView alloc]initWithFrame:CGRectMake(lblTitle.frame.size.width, 0, tabHeight, tabHeight)];
+ //               iconRect = rect;
+                rect.origin.x =lblTitle.frame.size.width;
+                UIImageView *icon = [[UIImageView alloc]initWithFrame:rect];
+                
                 icon.image = obj.icon;
                 
                 [tabBtn addSubview:icon];
@@ -99,7 +104,7 @@
         rectContent = self.frame;
         rectContent.origin.y = tabHeight + 5;
         rectContent.size.height = self.frame.size.height - (tabHeight + 5);
-        contentView = [(TabObj *)[objects objectAtIndex:0] view];
+        contentView = [(TabObj *)[objects objectAtIndex:selectedTab] view];
         contentView.frame = rectContent;
         [self addSubview:contentView];
     }
@@ -110,7 +115,7 @@
 //============== Vertical mode ===============
 //============================================
 //
--(id)initMenuVerticalWithFrame:(CGRect)frame andTabs:(NSArray *)objects
+-(id)initMenuVerticalWithFrame:(CGRect)frame tabWidth:(CGFloat)width titleFont:(UIFont*)font iconRect:(CGRect)rect tabs:(NSArray *)objects andSelectedIndex:(int)index;
 {
     self = [super initWithFrame:frame];
     if (self) {
@@ -119,35 +124,28 @@
         self.backgroundColor = [UIColor whiteColor];
         if(!objects || objects.count == 0) return self;
         selectedTab = 0;
+        if (index < objects.count) {
+            selectedTab = index;
+        }
         tabsArr = objects;
         UIScrollView * scrTab = [[UIScrollView alloc]init];
         
         //setup frame for scroll tabs
-        CGRect scrRect;
-        float tabHeight;
-        
-        if ([SharedData sharedInstance].isIpad) {
-            scrRect = CGRectMake(0, 0, TAB_IPAD_VERTI_WIDTH, frame.size.height);
-            tabHeight = TAB_IPAD_VERTI_WIDTH;
-        }
-        else
-        {
-            scrRect = CGRectMake(0, 0, TAB_IPHONE_VERTI_WIDTH, frame.size.height);
-            tabHeight = TAB_IPHONE_VERTI_WIDTH;
-            
-        }
+        CGFloat tabWidth = width;
+        CGRect scrRect = CGRectMake(0, 0, tabWidth, self.frame.size.height);
+
         scrTab.frame = scrRect;
         [scrTab setBounces:NO];
         [self addSubview:scrTab];
         
         //add tab buttons into scroll
-        float next_x_origin = 0;
+        float next_y_origin = 0;
         for (int i = 0; i< objects.count; i++) {
             TabObj * obj = [objects objectAtIndex:i];
             UIButton * tabBtn = [[UIButton alloc]init];
             tabBtn.tag = i;
             tabBtn.backgroundColor = [UIColor yellowColor];
-            if(i == 0)
+            if(i == selectedTab)
             {
                 tabBtn.backgroundColor = [UIColor whiteColor];
                 prevBtn = tabBtn;
@@ -160,33 +158,59 @@
             
             UILabel * lblTitle = [[UILabel alloc]init];
             [lblTitle setLineBreakMode:NSLineBreakByCharWrapping];
-
-            lblTitle.frame = CGRectMake(0 , 0, width, obj.title.length * );
+            CGFloat lblHeight ;
+            
+            if ([[NSString stringWithFormat:@"%@",obj.title] respondsToSelector:@selector( sizeWithFont:) ]) {
+                lblHeight =  [[NSString stringWithFormat:@"%@",obj.title] sizeWithFont:lblTitle.font].height * obj.title.length;
+            }
+            else
+            {
+                lblHeight =  [[NSString stringWithFormat:@"%@",obj.title] sizeWithAttributes:@{NSFontAttributeName:lblTitle.font}].height* obj.title.length;
+            }
+            
+            
+            lblTitle.numberOfLines = 0;
+            lblTitle.frame = CGRectMake(0 , 0,tabWidth , lblHeight );
             lblTitle.backgroundColor = [UIColor clearColor];
+            lblTitle.textAlignment = NSTextAlignmentCenter;
+            
+            
             lblTitle.text = obj.title;
+            NSString * convString = @"";
+            for (int n=(int)obj.title.length - 1; n > -1; --n) {
+                
+                convString = [NSString stringWithFormat:@"%@\n%@", [obj.title substringWithRange:NSMakeRange(n, 1)], convString];
+                
+                lblTitle.text = convString;
+                
+            }
             
             [tabBtn addSubview:lblTitle];
             
             if(obj.icon)
             {
-                UIImageView *icon = [[UIImageView alloc]initWithFrame:CGRectMake(lblTitle.frame.size.width, 0, tabHeight, tabHeight)];
+  //             iconRect = rect;
+                rect.origin.y = lblHeight;
+                UIImageView *icon = [[UIImageView alloc]initWithFrame:rect];
                 icon.image = obj.icon;
                 
                 [tabBtn addSubview:icon];
             }
-            tabBtn.frame = CGRectMake(next_x_origin, 0, width + tabHeight, tabHeight);
+            tabBtn.frame = CGRectMake(0, next_y_origin, tabWidth, tabWidth + lblHeight);
             //            [[tabBtn layer] setBorderWidth:1.0f];
             //            [[tabBtn layer] setBorderColor:[UIColor blackColor].CGColor];
             
-            next_x_origin = next_x_origin + tabBtn.frame.size.width;
+            next_y_origin = next_y_origin + tabBtn.frame.size.height;
         }
-        [scrTab setContentSize:CGSizeMake(next_x_origin, tabHeight)];
+        [scrTab setContentSize:CGSizeMake(tabWidth, next_y_origin)];
         
         //set view content
         rectContent = self.frame;
-        rectContent.origin.y = tabHeight + 5;
-        rectContent.size.height = self.frame.size.height - (tabHeight + 5);
-        contentView = [(TabObj *)[objects objectAtIndex:0] view];
+        rectContent.origin.x = tabWidth + 5;
+        rectContent.origin.y = 0;
+
+        rectContent.size.width = self.frame.size.width - (tabWidth + 5);
+        contentView = [(TabObj *)[objects objectAtIndex:selectedTab] view];
         contentView.frame = rectContent;
         [self addSubview:contentView];
 
@@ -201,7 +225,7 @@
     prevBtn.backgroundColor = [UIColor yellowColor];
     sender.backgroundColor = [UIColor whiteColor];
     
-    selectedTab = sender.tag;
+    selectedTab = (int)sender.tag;
     TabObj * tab = [tabsArr objectAtIndex:selectedTab];
     [contentView removeFromSuperview];
     contentView = tab.view;

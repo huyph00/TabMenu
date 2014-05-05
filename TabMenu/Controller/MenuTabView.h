@@ -18,9 +18,19 @@
     int selectedTab;
     CGRect rectContent ;
     UIButton *prevBtn;
+    
+//    CGFloat tabWidth;
+//    CGFloat tabHeight;
+//    CGRect iconRect;
+    
 }
--(id)initMenuHorizontalWithFrame:(CGRect)frame andTabs:(NSArray *)objects;
+//---- iconrect should be (0,0,w,h)----
+-(id)initMenuHorizontalWithFrame:(CGRect)frame tabHeight:(CGFloat)height titleFont:(UIFont*)font iconRect:(CGRect)rect tabs:(NSArray *)objects andSelectedIndex:(int)index;
+-(id)initMenuVerticalWithFrame:(CGRect)frame tabWidth:(CGFloat)width titleFont:(UIFont*)font iconRect:(CGRect)rect tabs:(NSArray *)objects andSelectedIndex:(int)index;
 
--(id)initMenuVerticalWithFrame:(CGRect)frame andTabs:(NSArray *)objects;
+//-(void)setTitleFont:(UIFont*)font;
+//-(void)setTabWidth:(CGFloat)width;
+//-(void)setTabHeight:(CGFloat)height;
+//-(void)setIconrect:(CGRect)rect;
 
 @end

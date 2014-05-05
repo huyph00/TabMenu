@@ -9,14 +9,9 @@
 #ifndef TabMenu_Constants_h
 #define TabMenu_Constants_h
 
-//#define TAB_IPHONE_HORI_WIDTH 50
-#define TAB_IPHONE_HORI_HEIGHT 20
+#define TAB_DEFAULT_HORI_HEIGHT 30
 
-//#define TAB_IPAD_HORI_WIDTH 100
-#define TAB_IPAD_HORI_HEIGHT 35
-
-#define TAB_IPHONE_VERTI_WIDTH 20
-#define TAB_IPAD_VERTI_WIDTH 35
+#define TAB_DEFAULT_VERTI_WIDTH 30
 
 
 #endif

@@ -10,5 +10,8 @@
 #import "MenuTabView.h"
 #import "TabObj.h"
 @interface ViewController : UIViewController
-
+{
+    MenuTabView * menu;
+    NSMutableArray *arrTab;
+}
 @end
