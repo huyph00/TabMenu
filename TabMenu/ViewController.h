@@ -14,4 +14,5 @@
     MenuTabView * menu;
     NSMutableArray *arrTab;
 }
+- (IBAction)switchMode:(id)sender;
 @end

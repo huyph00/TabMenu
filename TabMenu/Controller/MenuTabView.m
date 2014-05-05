@@ -31,7 +31,7 @@
         // Initialization code
         self.backgroundColor = [UIColor whiteColor];
         if(!objects || objects.count == 0) return self;
-        
+        isHoriMode = true;
         selectedTab = 0;
         if (index < objects.count) {
             selectedTab = index;
@@ -123,6 +123,7 @@
         
         self.backgroundColor = [UIColor whiteColor];
         if(!objects || objects.count == 0) return self;
+        isHoriMode = false;
         selectedTab = 0;
         if (index < objects.count) {
             selectedTab = index;
@@ -218,7 +219,14 @@
     }
     return self;
 }
-
+-(BOOL)isHorizontalMode;
+{
+    return isHoriMode;
+}
+-(int)selectedTabIndex;
+{
+    return selectedTab;
+}
 -(void)didSelectTab:(UIButton*)sender
 {
     if(selectedTab == sender.tag) return;

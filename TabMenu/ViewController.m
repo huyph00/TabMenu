@@ -47,10 +47,10 @@
     //test menu rect
     
     CGRect rect = self.view.frame;
-
+    rect.origin.x = 0;
     rect.origin.y = 50;
     rect.size.height = self.view.frame.size.height - 50;
-  menu = [[MenuTabView alloc]initMenuHorizontalWithFrame:rect tabHeight:50 titleFont:[UIFont systemFontOfSize:17] iconRect:CGRectMake(0, 0, 30, 30) tabs:arrTab andSelectedIndex:2];
+    menu = [[MenuTabView alloc]initMenuHorizontalWithFrame:rect tabHeight:50 titleFont:[UIFont systemFontOfSize:17] iconRect:CGRectMake(0, 0, 30, 30) tabs:arrTab andSelectedIndex:0];
 
 //    menu = [[MenuTabView alloc]initMenuVerticalWithFrame:rect tabWidth:30 titleFont:[UIFont systemFontOfSize:17] iconRect:CGRectMake(0, 0, 30, 30) tabs:arrTab andSelectedIndex:1];
     
@@ -90,4 +90,21 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (IBAction)switchMode:(id)sender {
+    if(!menu) return;
+    CGRect rect = self.view.frame;
+    rect.origin.y = 50;
+    rect.origin.x = 0;
+    rect.size.height = self.view.frame.size.height - 50;
+    [menu removeFromSuperview];
+    int index = [menu selectedTabIndex];
+    if ([menu isHorizontalMode]) {
+        menu = [[MenuTabView alloc]initMenuVerticalWithFrame:rect tabWidth:50 titleFont:[UIFont systemFontOfSize:17] iconRect:CGRectMake(0, 0, 30, 30) tabs:arrTab andSelectedIndex:index];
+    }
+
+    else     menu = [[MenuTabView alloc]initMenuHorizontalWithFrame:rect tabHeight:50 titleFont:[UIFont systemFontOfSize:17] iconRect:CGRectMake(0, 0, 30, 30) tabs:arrTab andSelectedIndex:index];
+
+
+    [self.view addSubview:menu];
+}
 @end
