@@ -14,7 +14,7 @@
     self = [super init];
     if (self) {
         // Initialization code
-        
+        self.title = @"";
         
         
     }

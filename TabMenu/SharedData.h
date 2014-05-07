@@ -12,6 +12,7 @@
 
 
 @property(nonatomic)BOOL isIpad;
++ (UIImage *)imageWithBundle:(NSString *)bundle scaledToSize:(CGSize)newSize ;
 
 + (SharedData*)sharedInstance;
 @end

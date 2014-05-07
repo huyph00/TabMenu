@@ -19,10 +19,15 @@
     CGRect rectContent ;
     UIButton *prevBtn;
     BOOL isHoriMode;
+    BOOL isOrderMode;
+    
+    UIScrollView * scrTab;
+    UIFont *curFont;
 //    CGFloat tabWidth;
 //    CGFloat tabHeight;
-//    CGRect iconRect;
+    CGRect iconRect;
     
+    NSMutableArray * buttonsArr;
 }
 //---- icon rect should be (0,0,w,h)----
 -(id)initMenuHorizontalWithFrame:(CGRect)frame tabHeight:(CGFloat)height titleFont:(UIFont*)font iconRect:(CGRect)rect tabs:(NSArray *)objects andSelectedIndex:(int)index;
@@ -30,9 +35,11 @@
 -(BOOL)isHorizontalMode;
 -(int)selectedTabIndex;
 
-//-(void)setTitleFont:(UIFont*)font;
-//-(void)setTabWidth:(CGFloat)width;
-//-(void)setTabHeight:(CGFloat)height;
-//-(void)setIconrect:(CGRect)rect;
+
+
+// --- this function use style of chrome tabs
+// OrderMode
+-(void)fixTabFrame;
+
 
 @end

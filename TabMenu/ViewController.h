@@ -14,5 +14,6 @@
     MenuTabView * menu;
     NSMutableArray *arrTab;
 }
+- (IBAction)fixTabSize:(id)sender;
 - (IBAction)switchMode:(id)sender;
 @end
