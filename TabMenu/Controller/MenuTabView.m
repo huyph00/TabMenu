@@ -294,209 +294,199 @@
 
 
 
--(void)fixTabFrame;
+-(void)fixTabHeight:(CGFloat)height;
 {
-    
-    isOrderMode = true;
-    if (isHoriMode) {
-        UIImage *imgStandarNormal = [[UIImage alloc]initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"tab-normal" ofType:@"png"]];
 
-        float heightToFix = imgStandarNormal.size.height;
-        [scrTab removeFromSuperview];
-        scrTab = nil;
-        scrTab = [[UIScrollView alloc]init];
-        if (!buttonsArr) {
-            buttonsArr = [[NSMutableArray alloc]init];
-        }
-        [buttonsArr removeAllObjects];
-
-        //setup frame for scroll tabs
-        CGFloat tabHeight = heightToFix;
-        
-        CGRect scrRect= CGRectMake(0, 0, self.frame.size.width, tabHeight);
-        
-        scrTab.frame = scrRect;
-        [scrTab setBounces:NO];
-        [self addSubview:scrTab];
-        
-        //add tab buttons into scroll
-        float next_x_origin = 0;
-        for (int i = 0; i< tabsArr.count; i++) {
-            TabObj * obj = [tabsArr objectAtIndex:i];
-            UIButton * tabBtn = [[UIButton alloc]init];
-            tabBtn.tag = i;
-            tabBtn.backgroundColor = [UIColor clearColor];
-            [tabBtn addTarget:self action:@selector(didSelectTab:) forControlEvents:UIControlEventTouchUpInside];
-            
-            [scrTab addSubview:tabBtn];
-            
-            UILabel * lblTitle = [[UILabel alloc]init];
-            lblTitle.font = curFont;
-            CGFloat width ;
-            
-            if ([[NSString stringWithFormat:@"%@",obj.title] respondsToSelector:@selector( sizeWithFont:) ]) {
-                width =  [[NSString stringWithFormat:@"%@",obj.title] sizeWithFont:lblTitle.font].width;
-            }
-            else
-            {
-                width =  [[NSString stringWithFormat:@"%@",obj.title] sizeWithAttributes:@{NSFontAttributeName:lblTitle.font}].width;
-            }
-            lblTitle.frame = CGRectMake(_SPACE*2 , 0, width,tabHeight);
-            lblTitle.backgroundColor = [UIColor clearColor];
-            lblTitle.text = [NSString stringWithFormat:@"%@",obj.title];
-            
-            [tabBtn addSubview:lblTitle];
-            CGFloat btnWidth = width + _SPACE*4;
-            if(obj.icon)
-            {
-                CGRect rect = iconRect;
-                rect.origin.x =rect.origin.x+_SPACE*2;
-                UIImageView *icon = [[UIImageView alloc]initWithFrame:rect];
-                
-                icon.image = obj.icon;
-
-                [tabBtn addSubview:icon];
-                lblTitle.frame = CGRectMake(_SPACE*3 + rect.size.width , 0, width,tabHeight);
-                btnWidth = btnWidth + rect.size.width + _SPACE;
-
-            }
-            tabBtn.frame = CGRectMake(next_x_origin, 0, btnWidth, tabHeight);
-            //scale image for button background
-            //standar image rect
-            
-
-            [tabBtn setBackgroundImage:[self standarScaleWithImage:[[UIImage alloc]initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"tab-normal" ofType:@"png"]]] forState:UIControlStateNormal];
-            if(i == selectedTab)
-            {
-
-                [tabBtn setBackgroundImage:[self standarScaleWithImage:[[UIImage alloc]initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"tab-active" ofType:@"png"]]] forState:UIControlStateNormal];
-                prevBtn = tabBtn;
-                
-            }
-            next_x_origin = next_x_origin + btnWidth - COVER_TAB_SPACE;
-            [buttonsArr addObject:tabBtn];
-            
-        }
-        [scrTab setContentSize:CGSizeMake(next_x_origin + COVER_TAB_SPACE, tabHeight)];
-        [scrTab setBackgroundColor:[UIColor clearColor]];
-        [self orderTabs];
-        //set view content
-        rectContent = self.frame;
-        rectContent.origin.y = tabHeight;
-        rectContent.size.height = self.frame.size.height - tabHeight ;
-        contentView = [(TabObj *)[tabsArr objectAtIndex:selectedTab] view];
-        contentView.frame = rectContent;
-        [self addSubview:contentView];
-
+    float heightToFix = height;
+    [scrTab removeFromSuperview];
+    scrTab = nil;
+    scrTab = [[UIScrollView alloc]init];
+    if (!buttonsArr) {
+        buttonsArr = [[NSMutableArray alloc]init];
     }
-    else
-    {
+    [buttonsArr removeAllObjects];
+
+    //setup frame for scroll tabs
+    CGFloat tabHeight = heightToFix;
     
-        UIImage *imgStandarNormal = [[UIImage alloc]initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"tab-normal-vertical" ofType:@"png"]];
-        [scrTab removeFromSuperview];
-        scrTab = nil;
-        scrTab = [[UIScrollView alloc]init];
-        if (!buttonsArr) {
-            buttonsArr = [[NSMutableArray alloc]init];
+    CGRect scrRect= CGRectMake(0, 0, self.frame.size.width, tabHeight);
+    
+    scrTab.frame = scrRect;
+    [scrTab setBounces:NO];
+    [self addSubview:scrTab];
+    
+    //add tab buttons into scroll
+    float next_x_origin = 0;
+    for (int i = 0; i< tabsArr.count; i++) {
+        TabObj * obj = [tabsArr objectAtIndex:i];
+        UIButton * tabBtn = [[UIButton alloc]init];
+        tabBtn.tag = i;
+        tabBtn.backgroundColor = [UIColor clearColor];
+        [tabBtn addTarget:self action:@selector(didSelectTab:) forControlEvents:UIControlEventTouchUpInside];
+        
+        [scrTab addSubview:tabBtn];
+        
+        UILabel * lblTitle = [[UILabel alloc]init];
+        lblTitle.font = curFont;
+        CGFloat width ;
+        
+        if ([[NSString stringWithFormat:@"%@",obj.title] respondsToSelector:@selector( sizeWithFont:) ]) {
+            width =  [[NSString stringWithFormat:@"%@",obj.title] sizeWithFont:lblTitle.font].width;
         }
+        else
+        {
+            width =  [[NSString stringWithFormat:@"%@",obj.title] sizeWithAttributes:@{NSFontAttributeName:lblTitle.font}].width;
+        }
+        lblTitle.frame = CGRectMake(_SPACE*2 , 0, width,tabHeight);
+        lblTitle.backgroundColor = [UIColor clearColor];
+        lblTitle.text = [NSString stringWithFormat:@"%@",obj.title];
         
-        [buttonsArr removeAllObjects];
-        //setup frame for scroll tabs
-        CGFloat tabWidth = imgStandarNormal.size.width;
-        CGRect scrRect = CGRectMake(0, 0, tabWidth, self.frame.size.height);
+        [tabBtn addSubview:lblTitle];
+        CGFloat btnWidth = width + _SPACE*4;
+        if(obj.icon)
+        {
+            CGRect rect = iconRect;
+            rect.origin.x =rect.origin.x+_SPACE*2;
+            UIImageView *icon = [[UIImageView alloc]initWithFrame:rect];
+            
+            icon.image = obj.icon;
+
+            [tabBtn addSubview:icon];
+            lblTitle.frame = CGRectMake(_SPACE*3 + rect.size.width , 0, width,tabHeight);
+            btnWidth = btnWidth + rect.size.width + _SPACE;
+
+        }
+        tabBtn.frame = CGRectMake(next_x_origin, 0, btnWidth, tabHeight);
+        //scale image for button background
+        //standar image rect
         
-        scrTab.frame = scrRect;
-        [scrTab setBounces:NO];
-        [self addSubview:scrTab];
-        
-        //add tab buttons into scroll
-        float next_y_origin = 0;
-        for (int i = 0; i< tabsArr.count; i++) {
-            TabObj * obj = [tabsArr objectAtIndex:i];
-            UIButton * tabBtn = [[UIButton alloc]init];
-            tabBtn.tag = i;
-            [tabBtn addTarget:self action:@selector(didSelectTab:) forControlEvents:UIControlEventTouchUpInside];
-            
-            [scrTab addSubview:tabBtn];
-            
-            
-            UILabel * lblTitle = [[UILabel alloc]init];
-            [lblTitle setLineBreakMode:NSLineBreakByCharWrapping];
-            CGFloat lblHeight ;
-            lblTitle.font = curFont;
 
-            if ([[NSString stringWithFormat:@"%@",obj.title] respondsToSelector:@selector( sizeWithFont:) ]) {
-                lblHeight =  [[NSString stringWithFormat:@"%@",obj.title] sizeWithFont:lblTitle.font].height * obj.title.length;
-            }
-            else
-            {
-                lblHeight =  [[NSString stringWithFormat:@"%@",obj.title] sizeWithAttributes:@{NSFontAttributeName:lblTitle.font}].height* obj.title.length;
-            }
-            
-            
-            lblTitle.numberOfLines = 0;
-            lblTitle.frame = CGRectMake(0 , _SPACE*2,tabWidth , lblHeight );
-            lblTitle.backgroundColor = [UIColor clearColor];
-            lblTitle.textAlignment = NSTextAlignmentCenter;
-            
-            
-            lblTitle.text = obj.title;
-            NSString * convString = @"";
-            for (int n=(int)obj.title.length - 1; n > -1; --n) {
-                
-                convString = [NSString stringWithFormat:@"%@\n%@", [obj.title substringWithRange:NSMakeRange(n, 1)], convString];
-                
-                lblTitle.text = convString;
-                
-            }
-            
-            [tabBtn addSubview:lblTitle];
-            CGFloat btnHeight = lblHeight + _SPACE*4;
-            if(obj.icon)
-            {
-                CGRect imgRect = iconRect;
-                imgRect.origin.y = _SPACE*2;
-                UIImageView *icon = [[UIImageView alloc]initWithFrame:imgRect];
-                icon.image = obj.icon;
-                [tabBtn addSubview:icon];
-                lblTitle.frame = CGRectMake( 0,_SPACE*3 + imgRect.size.height , tabWidth,lblHeight);
+        [tabBtn setBackgroundImage:[self standarScaleWithImage:[[UIImage alloc]initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"tab-normal" ofType:@"png"]]] forState:UIControlStateNormal];
+        if(i == selectedTab)
+        {
 
-                btnHeight = btnHeight + _SPACE + imgRect.size.height;
-
-            }
-            tabBtn.frame = CGRectMake(0, next_y_origin, tabWidth, btnHeight  );
-
-            [tabBtn setBackgroundImage:[self standarScaleWithImage:[[UIImage alloc]initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"tab-normal-vertical" ofType:@"png"]]] forState:UIControlStateNormal];
-            if(i == selectedTab)
-            {
-
-                [tabBtn setBackgroundImage:[self standarScaleWithImage:[[UIImage alloc]initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"tab-active-vertical" ofType:@"png"]]] forState:UIControlStateNormal];
-                prevBtn = tabBtn;
-                
-            }
-            [buttonsArr addObject:tabBtn];
-            //            [[tabBtn layer] setBorderWidth:1.0f];
-            //            [[tabBtn layer] setBorderColor:[UIColor blackColor].CGColor];
-            
-            next_y_origin = next_y_origin + btnHeight - COVER_TAB_SPACE;
+            [tabBtn setBackgroundImage:[self standarScaleWithImage:[[UIImage alloc]initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"tab-active" ofType:@"png"]]] forState:UIControlStateNormal];
+            prevBtn = tabBtn;
             
         }
-        [scrTab setContentSize:CGSizeMake(tabWidth, next_y_origin +COVER_TAB_SPACE)];
-        [self orderTabs];
-
-        //set view content
-        rectContent = self.frame;
-        rectContent.origin.x = tabWidth ;
-        rectContent.origin.y = 0;
+        next_x_origin = next_x_origin + btnWidth - COVER_TAB_SPACE;
+        [buttonsArr addObject:tabBtn];
         
-        rectContent.size.width = self.frame.size.width - tabWidth ;
-        contentView = [(TabObj *)[tabsArr objectAtIndex:selectedTab] view];
-        contentView.frame = rectContent;
-        [self addSubview:contentView];
-        
-        
-    
     }
+    [scrTab setContentSize:CGSizeMake(next_x_origin + COVER_TAB_SPACE, tabHeight)];
+    [scrTab setBackgroundColor:[UIColor clearColor]];
+    [self orderTabs];
+    //set view content
+    rectContent = self.frame;
+    rectContent.origin.y = tabHeight;
+    rectContent.size.height = self.frame.size.height - tabHeight ;
+    contentView = [(TabObj *)[tabsArr objectAtIndex:selectedTab] view];
+    contentView.frame = rectContent;
+    [self addSubview:contentView];
+
+}
+-(void)fixTabWidth:(CGFloat)width
+{
+    [scrTab removeFromSuperview];
+    scrTab = nil;
+    scrTab = [[UIScrollView alloc]init];
+    if (!buttonsArr) {
+        buttonsArr = [[NSMutableArray alloc]init];
+    }
+    
+    [buttonsArr removeAllObjects];
+    //setup frame for scroll tabs
+    CGFloat tabWidth = width;
+    CGRect scrRect = CGRectMake(0, 0, tabWidth, self.frame.size.height);
+    
+    scrTab.frame = scrRect;
+    [scrTab setBounces:NO];
+    [self addSubview:scrTab];
+    
+    //add tab buttons into scroll
+    float next_y_origin = 0;
+    for (int i = 0; i< tabsArr.count; i++) {
+        TabObj * obj = [tabsArr objectAtIndex:i];
+        UIButton * tabBtn = [[UIButton alloc]init];
+        tabBtn.tag = i;
+        [tabBtn addTarget:self action:@selector(didSelectTab:) forControlEvents:UIControlEventTouchUpInside];
+        
+        [scrTab addSubview:tabBtn];
+        
+        
+        UILabel * lblTitle = [[UILabel alloc]init];
+        [lblTitle setLineBreakMode:NSLineBreakByCharWrapping];
+        CGFloat lblHeight ;
+        lblTitle.font = curFont;
+
+        if ([[NSString stringWithFormat:@"%@",obj.title] respondsToSelector:@selector( sizeWithFont:) ]) {
+            lblHeight =  [[NSString stringWithFormat:@"%@",obj.title] sizeWithFont:lblTitle.font].height * obj.title.length;
+        }
+        else
+        {
+            lblHeight =  [[NSString stringWithFormat:@"%@",obj.title] sizeWithAttributes:@{NSFontAttributeName:lblTitle.font}].height* obj.title.length;
+        }
+        
+        
+        lblTitle.numberOfLines = 0;
+        lblTitle.frame = CGRectMake(0 , _SPACE*2,tabWidth , lblHeight );
+        lblTitle.backgroundColor = [UIColor clearColor];
+        lblTitle.textAlignment = NSTextAlignmentCenter;
+        
+        
+        lblTitle.text = obj.title;
+        NSString * convString = @"";
+        for (int n=(int)obj.title.length - 1; n > -1; --n) {
+            
+            convString = [NSString stringWithFormat:@"%@\n%@", [obj.title substringWithRange:NSMakeRange(n, 1)], convString];
+            
+            lblTitle.text = convString;
+            
+        }
+        
+        [tabBtn addSubview:lblTitle];
+        CGFloat btnHeight = lblHeight + _SPACE*4;
+        if(obj.icon)
+        {
+            CGRect imgRect = iconRect;
+            imgRect.origin.y = _SPACE*2;
+            UIImageView *icon = [[UIImageView alloc]initWithFrame:imgRect];
+            icon.image = obj.icon;
+            [tabBtn addSubview:icon];
+            lblTitle.frame = CGRectMake( 0,_SPACE*3 + imgRect.size.height , tabWidth,lblHeight);
+
+            btnHeight = btnHeight + _SPACE + imgRect.size.height;
+
+        }
+        tabBtn.frame = CGRectMake(0, next_y_origin, tabWidth, btnHeight  );
+
+        [tabBtn setBackgroundImage:[self standarScaleWithImage:[[UIImage alloc]initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"tab-normal-vertical" ofType:@"png"]]] forState:UIControlStateNormal];
+        if(i == selectedTab)
+        {
+
+            [tabBtn setBackgroundImage:[self standarScaleWithImage:[[UIImage alloc]initWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"tab-active-vertical" ofType:@"png"]]] forState:UIControlStateNormal];
+            prevBtn = tabBtn;
+            
+        }
+        [buttonsArr addObject:tabBtn];
+        
+        next_y_origin = next_y_origin + btnHeight - COVER_TAB_SPACE;
+        
+    }
+    [scrTab setContentSize:CGSizeMake(tabWidth, next_y_origin +COVER_TAB_SPACE)];
+    [self orderTabs];
+
+    //set view content
+    rectContent = self.frame;
+    rectContent.origin.x = tabWidth ;
+    rectContent.origin.y = 0;
+    
+    rectContent.size.width = self.frame.size.width - tabWidth ;
+    contentView = [(TabObj *)[tabsArr objectAtIndex:selectedTab] view];
+    contentView.frame = rectContent;
+    [self addSubview:contentView];
+
+    
 }
 
 -(void)orderTabs

@@ -38,8 +38,10 @@
 
 
 // --- this function use style of chrome tabs
+// fix with current height(horizon) or width(vertical) of tab's background image
 // OrderMode
--(void)fixTabFrame;
+-(void)fixTabHeight:(CGFloat)height;
+-(void)fixTabWidth:(CGFloat)width;
 
 
 @end

@@ -107,7 +107,9 @@
 }
 
 - (IBAction)fixTabSize:(id)sender {
-    [menu fixTabFrame];
+    if(menu.isHorizontalMode)
+    [menu fixTabHeight:27];
+    else [menu fixTabWidth:27];
 }
 
 - (IBAction)switchMode:(id)sender {
